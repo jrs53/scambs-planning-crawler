@@ -102,7 +102,7 @@ for page_link in page_links:
     page_number = page_link.text_content().strip()
     print str(details_so_far) + ' [Page ' + str(page_number) + ' of ' + str(len(page_links)) + ']'
 
-    if int(page_link.text_content().strip()) == 3: break
+    #if int(page_link.text_content().strip()) == 3: break
 
 # Write output to file
 import csv
