@@ -10,7 +10,6 @@ def process_page(page):
         id = tree.xpath('//*[@id="apas_form"]/table/tr[' + str(i) + ']/td[1]/a')
         details = get_details(id[0].text_content().strip())
         ret_val.append(details)
-
     return ret_val
 
 
@@ -88,7 +87,7 @@ page = requests.post(URL, data=payload, headers=headers)
 
 # Follow links to get details for initial page
 details = process_page(page)
-print '1' # first page done
+print 'Got first page' # first page done
 
 # Follow linked search result pages
 tree = html.fromstring(page.content)
@@ -96,14 +95,19 @@ page_links = tree.xpath('//*[@id="apas_form_text"]/p[2]/a')
 for page_link in page_links:
     url = page_link.get('href')
     page = requests.get('http://plan.scambs.gov.uk/swiftlg/apas/run/' + url)
-    details.append(process_page(page))
-    print page_link.text_content().strip()    # print simple progress counter
+    details += process_page(page)
+
+    # Print simple progress counter
+    details_so_far = len(details)
+    page_number = page_link.text_content().strip()
+    print str(details_so_far) + ' [Page ' + str(page_number) + ' of ' + str(len(page_links)) + ']'
+
     if int(page_link.text_content().strip()) == 3: break
 
 # Write output to file
 import csv
 print len(details)
-with open('c:\\data\\scambs.txt', "w") as file:
+with open('c:\\data\\scambs.txt', "wb") as file:
     writer = csv.writer(file)
     for tup in details:
         writer.writerow(tup)
