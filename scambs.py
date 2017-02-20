@@ -5,10 +5,11 @@ def process_page(page):
     ret_val = list()
 
     tree = html.fromstring(page.content)
-    # Iterate over matching applications
-    for i in range(2, 12):
-        id = tree.xpath('//*[@id="apas_form"]/table/tr[' + str(i) + ']/td[1]/a')
-        details = get_details(id[0].text_content().strip())
+    ids = tree.xpath('//*[@class="apas_tblContent"]/a')
+
+    # Iterate over all matching ids
+    for id in ids:
+        details = get_details(id.text_content().strip())
         ret_val.append(details)
     return ret_val
 
@@ -25,8 +26,8 @@ def get_details(application_ref):
     decision_date = fields[2].text_content().strip()
     application_type = fields[3].text_content().strip()
     extension_of_time = fields[4].text_content().strip()
-    parish = fields[5].text_content().strip()
-    main_location = fields[6].text_content().strip()
+    parish = fields[5].text_content().strip().replace('\n', '').replace('\r', '')
+    main_location = fields[6].text_content().strip().replace('\n', '').replace('\r', '')
     full_description = fields[7].text_content().strip()
     status = fields[8].text_content().strip()
 
@@ -52,7 +53,7 @@ payload = {
     'JUSTLOCATION.MAINBODY.WPACIS.1': '',
     'JUSTDEVDESC.MAINBODY.WPACIS.1': '',
     'SURNAME.MAINBODY.WPACIS.1': '',
-    'REGFROMDATE.MAINBODY.WPACIS.1': '01/04/2016',
+    'REGFROMDATE.MAINBODY.WPACIS.1': '01/02/2017',
     'REGTODATE.MAINBODY.WPACIS.1': '',
     'DECFROMDATE.MAINBODY.WPACIS.1': '',
     'DECTODATE.MAINBODY.WPACIS.1': '',
@@ -100,7 +101,7 @@ for page_link in page_links:
     # Print simple progress counter
     details_so_far = len(details)
     page_number = page_link.text_content().strip()
-    print str(details_so_far) + ' [Page ' + str(page_number) + ' of ' + str(len(page_links)) + ']'
+    print str(details_so_far) + ' [Page ' + str(page_number) + ' of ' + str(len(page_links) + 1) + ']'
 
     #if int(page_link.text_content().strip()) == 3: break
 
