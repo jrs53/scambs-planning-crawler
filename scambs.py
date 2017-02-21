@@ -53,7 +53,7 @@ payload = {
     'JUSTLOCATION.MAINBODY.WPACIS.1': '',
     'JUSTDEVDESC.MAINBODY.WPACIS.1': '',
     'SURNAME.MAINBODY.WPACIS.1': '',
-    'REGFROMDATE.MAINBODY.WPACIS.1': '01/02/2017',
+    'REGFROMDATE.MAINBODY.WPACIS.1': '01/02/2016',
     'REGTODATE.MAINBODY.WPACIS.1': '',
     'DECFROMDATE.MAINBODY.WPACIS.1': '',
     'DECTODATE.MAINBODY.WPACIS.1': '',
@@ -106,9 +106,9 @@ for page_link in page_links:
     #if int(page_link.text_content().strip()) == 3: break
 
 # Write output to file
-import csv
+import unicodecsv
 print len(details)
 with open('c:\\data\\scambs.txt', "wb") as file:
-    writer = csv.writer(file)
+    writer = unicodecsv.writer(file)
     for tup in details:
         writer.writerow(tup)
